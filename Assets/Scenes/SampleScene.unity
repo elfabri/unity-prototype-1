@@ -205,8 +205,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.3238578, y: -0.0052209045, z: 0.0017386818, w: 0.9460898}
-  m_LocalPosition: {x: -0.8837358, y: 5.053548, z: -6.653393}
+  m_LocalRotation: {x: -0.37630644, y: 0.0035575035, z: -0.0016539545, w: -0.92648697}
+  m_LocalPosition: {x: -4.3503823, y: 62.254715, z: -79.8697}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -640,7 +640,7 @@ Transform:
   m_GameObject: {fileID: 2082646294}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.37669, y: 0.5, z: -0.03013}
+  m_LocalPosition: {x: -0.37669, y: 0.82, z: -0.03013}
   m_LocalScale: {x: 2.01, y: 1, z: 4.96}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -658,7 +658,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 401c3a1bdf4c8ad4dae0a53d565e6089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
+  maxMovementSpeed: 50
+  velocity: {x: 0, y: 0, z: 0}
+  deccSpeed: -50
   turnSpeed: 100
 --- !u!54 &2082646300
 Rigidbody:
@@ -668,7 +670,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082646294}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -685,7 +687,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!114 &2082646301
 MonoBehaviour:

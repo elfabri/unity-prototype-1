@@ -8,28 +8,37 @@ public class Movements : MonoBehaviour
     private PlayerInput _playerInput;
 
     private Vector3 inputVector;
-    private Vector3 accelerationVector;
+    private float accelerationInput;
+    private Vector3 accelerationVector = Vector3.zero;
 
-    public float movementSpeed = 5f;
-    public float turnSpeed = 100f;
+    public float maxMovementSpeed = 25f;
+    public Vector3 velocity = Vector3.zero;
+    public float deccSpeed = -20f;
+    public float turnSpeed = 50f;
     private float turnAmount = 0f;
     private Quaternion turnOffset;
+    private InputAction accInputAction;
 
     void Awake()
     {
         _playerInput = GetComponent<PlayerInput>();
         InputSystem.actions.Disable();
+
+        // activate default action map, set on editor
         _playerInput.currentActionMap?.Enable();
+        accInputAction = _playerInput.actions.FindAction("Acceleration");
 
         _rb = GetComponent<Rigidbody>();
     }
 
-    public void OnMove(InputValue value)
+    public void OnAcceleration(InputValue value)
     {
-        inputVector = value.Get<Vector2>();
+        accelerationInput = value.Get<float>();
+    }
 
-        // correction to 3D
-        accelerationVector = transform.forward * inputVector.y;
+    public void OnTurn(InputValue v)
+    {
+        inputVector = v.Get<Vector2>();
 
         turnAmount = inputVector.x * turnSpeed * Time.fixedDeltaTime;
         turnOffset = Quaternion.Euler( 0, turnAmount, 0 );
@@ -37,7 +46,28 @@ public class Movements : MonoBehaviour
 
     void Update()
     {
-        _rb.AddForce(accelerationVector * movementSpeed, ForceMode.Acceleration);
-        _rb.MoveRotation(Quaternion.Normalize(_rb.rotation * turnOffset));
+
+        if (accInputAction.IsPressed())
+        {
+            accelerationVector = transform.forward * accelerationInput;
+            if (accelerationInput > 0)
+            {
+                _rb.linearVelocity = Vector3.SmoothDamp(_rb.linearVelocity, accelerationVector * maxMovementSpeed, ref velocity, 0.5f);
+            }
+            else
+            {
+                _rb.linearVelocity = Vector3.SmoothDamp(_rb.linearVelocity, Vector3.zero, ref velocity, 0.8f);
+            }
+        }
+        else
+        {
+            // deccelerating
+            _rb.linearVelocity = Vector3.SmoothDamp(_rb.linearVelocity, Vector3.zero, ref velocity, 1.5f);
+        }
+
+        if (_rb.linearVelocity.magnitude > 0.1)
+        {
+            _rb.MoveRotation(Quaternion.Normalize(_rb.rotation * turnOffset));
+        }
     }
 }
